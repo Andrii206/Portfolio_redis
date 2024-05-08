@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Post;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 
 class RedisTestCommand extends Command
 {
@@ -28,11 +27,8 @@ class RedisTestCommand extends Command
      */
     public function handle()
     {
-        // $post = Post::find(1);
-        // Redis::set('posts:' . $post->id, $post);
-        $post = Redis::get('posts:1');
-        $post = Post::make((array)json_decode($post));
-        dd($post);
-        
+        Post::all()->each((function($post){
+            Cache::put('posts:' . $post->id, $post);
+        }));
     }
 }
