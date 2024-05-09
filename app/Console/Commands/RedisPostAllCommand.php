@@ -2,18 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Post;
 use Illuminate\Console\Command;
+use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
 
-class RedisTestCommand extends Command
+class RedisPostAllCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'redis:go';
+    protected $signature = 'redis:all';
 
     /**
      * The console command description.
@@ -27,8 +27,7 @@ class RedisTestCommand extends Command
      */
     public function handle()
     {
-        Post::all()->each((function($post){
-            Cache::put('posts:' . $post->id, $post);
-        }));
+        $posts = Post::all();
+        Cache::put('posts:all', $posts);
     }
 }

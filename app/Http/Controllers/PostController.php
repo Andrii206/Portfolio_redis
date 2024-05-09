@@ -13,11 +13,17 @@ class PostController extends Controller
         $posts = Cache::rememberForever('posts:all', function () {
             return Post::all();
         });
+        return inertia('Post/Index', compact('posts'));
     }
 
     public function show($id)
     {
         $posts = Cache::get('posts:' . $id);
         dd($posts->title);
+    }
+
+    public function create()
+    {
+        return inertia('Post/Create', compact('cache'));
     }
 }
