@@ -3,19 +3,22 @@
         <div class="mb-4">
             <h3 class="text-xl">Додати пост</h3>
         </div>
+        <div class="mb-8">
+            <Link :href="route('post.index')" class="text-sky-500 text-sm">Back</Link>
+        </div>
         <div>
             <div>
                 <div class="mb-4">
-                    <input @keyup="storeCache" type="text" class="border border-gray-300 borde" v-model="title">
+                    <input type="text" class="border border-gray-300 borde" v-model="title">
                 </div>
                 <div class="mb-4">
-                    <input @keyup="storeCache" type="text" class="border border-gray-300 borde" v-model="content">
+                    <input type="text" class="border border-gray-300 borde" v-model="content">
                 </div>
                 <div class="mb-4">
-                    <input @keyup="storeCache" type="text" class="border border-gray-300 borde" v-model="day_for_create">
+                    <input type="text" class="border border-gray-300 borde" v-model="likes">
                 </div>
                 <div class="mb-4">
-                    <a @click.prevent="store" href="#" class="inline-block px-4 py-2 text-white bg-sky-700">Додати</a>
+                    <a @click.prevent="store" class="inline-block px-4 py-2 text-white bg-sky-700">Додати</a>
                 </div>
             </div>
         </div>
@@ -24,6 +27,7 @@
 <script>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import axios from "axios";
+import {Link} from '@inertiajs/vue3'
 
 export default {
     name:"Create",
@@ -33,22 +37,13 @@ export default {
         return{
             'title' : '',
             'content' : '',
-            'day_for_create' : 0,
+            'likes' : 0,
 
         }
     },
 
-    props: [
-        'cache'
-    ],
- 
-
-    mounted(){
-        if(this.cache){
-            this.title  = this.cache.title
-            this.content = this.cache.content
-            this.day_for_create = this.cache.day_for_create
-        }
+    components :{
+        Link
     },
 
     methods: {
@@ -56,23 +51,10 @@ export default {
             axios.post('/posts', {
                 title : this.title,
                 content : this.content,
-                day_for_create : this.day_for_create
-            }).then(res => {
-                this.title = ''
-                this.content = ''
-                this.day_for_create = 0
-            })
-        },
-
-        storeCache(){
-            axios.post('/posts/cache', {
-                title : this.title,
-                content : this.content,
-                day_for_create : this.day_for_create
-            }).then(res => {
-                console.log(res);
-            })
-            console.log(this.cache)
+                likes : this.likes
+            }).then(response => {
+            this.$router.push({ name: 'post.index' });
+        })
         },
     },
 }
